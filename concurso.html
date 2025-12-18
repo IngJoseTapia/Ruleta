@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Concurso con Ruleta</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<div id="encabezado-area">
+  <h1>Concurso de Eliminación</h1>
+  <h2 id="instruccion">Gira la ruleta para seleccionar el área</h2>
+</div>
+
+<div id="encabezado-preguntas" class="oculto">
+  <h1>Ronda de preguntas</h1>
+  <h2>Gira la ruleta para seleccionar una pregunta</h2>
+</div>
+
+<!-- RULETA FIJA -->
+<div id="contenedor-ruleta" class="contenedor-ruleta">
+  <div class="wrapper-ruleta">
+    <div id="ruleta-area" class="ruleta"></div>
+    <div class="flecha"></div>
+  </div>
+</div>
+
+
+<!-- SEGUNDA RULETA -->
+<div id="contenedor-ruleta-preguntas" class="contenedor-ruleta" style="display:none;">
+  <div class="wrapper-ruleta">
+    <div id="ruleta-pregunta" class="ruleta"></div>
+    <div class="flecha"></div>
+  </div>
+</div>
+
+<!-- CONTENIDO DEL JUEGO -->
+<div id="contenido">
+
+  <div id="fase-area">
+    <button onclick="girarArea()">Girar Ruleta</button>
+    <button
+        id="btn-ir-preguntas"
+        onclick="irAPreguntas()"
+        style="display:none;"
+    >
+        Ir a preguntas
+    </button>
+  </div>
+
+  <div id="fase-pregunta" class="oculto">
+    <button onclick="girarPregunta()">Girar Ruleta</button>
+    <!-- 🔙 NUEVO BOTÓN -->
+    <button onclick="volverARuletaAreas()" class="btn-volver">
+      Volver a ruleta principal
+    </button>
+    <!-- 🆕 Botón mostrar pregunta -->
+    <button
+        id="btn-mostrar-pregunta"
+        onclick="mostrarPreguntaExistente()"
+        style="display:none;"
+    >
+        Pregunta
+    </button>
+  </div>
+</div>
+
+<!-- MODAL ÁREA SELECCIONADA -->
+<div id="modal-area" class="modal">
+  <div class="modal-contenido">
+    <h2 class="modal-area-titulo">El área seleccionada es:</h2>
+    <div id="area-ganadora" class="area-ganadora"></div>
+
+    <div class="modal-botones">
+      <button onclick="cerrarModal()">Volver a girar</button>
+      <button onclick="irAPreguntas()">Preguntas</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PREGUNTA -->
+<div id="modal-pregunta" class="modal">
+  <div class="modal-contenido">
+
+    <h3 id="modal-area-titulo"></h3>
+
+    <h2 id="modal-pregunta-texto"></h2>
+
+    <div class="opciones" id="modal-opciones"></div>
+
+    <div class="modal-botones">
+      <button onclick="cerrarModalPregunta()">Cerrar</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/game.js"></script>
+
+</body>
+</html>
