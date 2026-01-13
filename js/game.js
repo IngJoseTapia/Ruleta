@@ -12,11 +12,11 @@
     const encabezadoPreguntas = document.getElementById("encabezado-preguntas");
 
     const COLORES_RULETA = [
-        "#fc9c9cff", 
+        "#d47efcff", 
         "#eef988ff", 
         "#8493feff", 
         "#96ff8eff", 
-        "#b3ff90ff"  
+        "#ff9090ff"  
     ];
 
     /* ================== ESTADO ================== */
@@ -35,29 +35,44 @@
     const totalAreas = areas.length;
     const anguloPorArea = 360 / totalAreas;
 
+    function generarFondoRuleta(colores, total) {
+  const angulo = 360 / total;
+  let gradiente = "conic-gradient(from 90deg, ";
+
+  for (let i = 0; i < total; i++) {
+    const color = colores[i % colores.length];
+    const inicio = i * angulo;
+    const fin = (i + 1) * angulo;
+    gradiente += `${color} ${inicio}deg ${fin}deg, `;
+  }
+
+  return gradiente.slice(0, -2) + ")";
+}
+
+ruletaArea.style.background = generarFondoRuleta(
+  COLORES_RULETA,
+  totalAreas
+);
+
     areas.forEach((area, i) => {
-    const sector = document.createElement("div");
-    sector.className = "sector";
-    sector.style.transform = `rotate(${i * anguloPorArea}deg)`;
+  const sector = document.createElement("div");
+  sector.className = "sector";
 
-    const texto = document.createElement("span");
-    texto.textContent = area;
+  const texto = document.createElement("span");
+  texto.textContent = area;
 
-    // 🔑 Centro del sector
-    const anguloTexto = anguloPorArea / 2;
+  const anguloTexto = i * anguloPorArea + anguloPorArea / 2;
+  const radio = 150;
 
-    // Distancia radial (ajustable)
-    const radio = 170;
+  texto.style.transform = `
+    rotate(${anguloTexto}deg)
+    translate(${radio}px)
+  `;
 
-    texto.style.transform = `
-        rotate(${anguloTexto}deg)
-        translate(${radio}px)
-        rotate(${-anguloTexto}deg)
-    `;
+  sector.appendChild(texto);
+  ruletaArea.appendChild(sector);
+});
 
-    sector.appendChild(texto);
-    ruletaArea.appendChild(sector);
-    });
 
     // Crear líneas divisorias
     for (let i = 0; i < totalAreas; i++) {
@@ -162,8 +177,18 @@
     function construirRuletaPreguntas(preguntas) {
     ruletaPregunta.innerHTML = "";
 
+    if (preguntas.length === 0) {
+        alert("Ya no hay preguntas disponibles en esta área");
+        return;
+    }
+
     const total = preguntas.length;
     anguloPorPregunta = 360 / total;
+
+    ruletaPregunta.style.background = generarFondoRuleta(
+    COLORES_RULETA,
+    total
+    );
 
     preguntas.forEach((pregunta, i) => {
         const sector = document.createElement("div");
@@ -177,13 +202,9 @@
         texto.textContent = numero;
 
         const anguloTexto = anguloPorPregunta / 2;
-        const radio = 170;
+        const radio = 160;
 
-        texto.style.transform = `
-        rotate(${anguloTexto}deg)
-        translate(${radio}px)
-        rotate(${-anguloTexto}deg)
-        `;
+        texto.style.transform = `translate(${radio}px)`;
 
         sector.appendChild(texto);
         ruletaPregunta.appendChild(sector);
@@ -199,7 +220,7 @@
     }
 
     window.girarPregunta = function () {
-    if (girandoPregunta || preguntasDisponibles.length === 0) {
+    if (girandoPregunta || preguntaYaGiró || preguntasDisponibles.length === 0) {
         alert("Ya no hay preguntas disponibles en esta área");
         return;
     }
@@ -247,7 +268,7 @@
     // ⏳ Delay antes de abrir el modal (3 segundos)
     setTimeout(() => {
         mostrarPreguntaEnModal();
-    }, 3000);
+    }, 1000);
     }
 
     function mostrarPreguntaEnModal() {
